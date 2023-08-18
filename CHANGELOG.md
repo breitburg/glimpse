@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Add smooth corners
+
 ## 0.0.4
 
 * Add bottom safe area

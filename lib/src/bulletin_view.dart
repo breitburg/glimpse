@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smooth_corner/smooth_corner.dart';
 
 class DraggableBulletinView extends StatefulWidget {
   final bool draggable, dragDismissible;
@@ -25,15 +26,11 @@ class _DraggableBulletinViewState extends State<DraggableBulletinView>
     with SingleTickerProviderStateMixin {
   static const threshold = 0.95;
 
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    value: threshold,
-  );
+  late final AnimationController _controller =
+      AnimationController(vsync: this, value: threshold);
 
   @override
   Widget build(BuildContext context) {
-    final bottomPadding = MediaQuery.of(context).padding.bottom;
-
     return Align(
       alignment: Alignment.bottomCenter,
       child: MediaQuery(
@@ -41,17 +38,16 @@ class _DraggableBulletinViewState extends State<DraggableBulletinView>
         child: _dragDetector(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: widget.height + bottomPadding,
-              maxWidth: widget.height,
-            ),
+                maxHeight: widget.height, maxWidth: widget.height),
             child: Padding(
-              padding:
-                  EdgeInsets.only(left: 8, right: 8, bottom: bottomPadding + 8),
+              // I don't know why, but Apple decided to give this view a 9pt padding
+              padding: const EdgeInsets.all(9),
               child: Material(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
                 clipBehavior: Clip.antiAlias,
+                shape: SmoothRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  smoothness: 0.6,
+                ),
                 color: widget.backgroundColor ??
                     Theme.of(context).scaffoldBackgroundColor,
                 child: Builder(builder: widget.builder),

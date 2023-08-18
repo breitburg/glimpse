@@ -72,8 +72,8 @@ class AirPodsProRenameDummy extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           CupertinoButton(
-            child: Text('Done'),
             onPressed: Navigator.of(context, rootNavigator: true).pop,
+            child: Text('Done'),
           ),
         ],
       ),
