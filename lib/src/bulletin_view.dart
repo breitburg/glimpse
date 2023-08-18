@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class DraggableBulletinView extends StatefulWidget {
   final bool draggable, dragDismissible;
@@ -33,21 +32,27 @@ class _DraggableBulletinViewState extends State<DraggableBulletinView>
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: const MediaQueryData(),
-      child: _dragDetector(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: widget.height),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Material(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: MediaQuery(
+        data: const MediaQueryData(),
+        child: _dragDetector(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: widget.height,
+              maxWidth: widget.height,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Material(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                clipBehavior: Clip.antiAlias,
+                color: widget.backgroundColor ??
+                    Theme.of(context).scaffoldBackgroundColor,
+                child: Builder(builder: widget.builder),
               ),
-              clipBehavior: Clip.antiAlias,
-              color: widget.backgroundColor ??
-                  Theme.of(context).scaffoldBackgroundColor,
-              child: Builder(builder: widget.builder),
             ),
           ),
         ),

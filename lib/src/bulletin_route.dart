@@ -35,16 +35,13 @@ class BulletinModalRoute extends PageRouteBuilder {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: DraggableBulletinView(
-        builder: builder,
-        draggable: draggable,
-        dragDismissible: dragDismissible,
-        height: height,
-        onClose: Navigator.of(context).pop,
-        backgroundColor: backgroundColor,
-      ),
+    return DraggableBulletinView(
+      builder: builder,
+      draggable: draggable,
+      dragDismissible: dragDismissible,
+      height: height,
+      onClose: Navigator.of(context).pop,
+      backgroundColor: backgroundColor,
     );
   }
 }
