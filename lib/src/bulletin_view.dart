@@ -32,6 +32,8 @@ class _DraggableBulletinViewState extends State<DraggableBulletinView>
 
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: MediaQuery(
@@ -39,11 +41,12 @@ class _DraggableBulletinViewState extends State<DraggableBulletinView>
         child: _dragDetector(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: widget.height,
+              maxHeight: widget.height + bottomPadding,
               maxWidth: widget.height,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding:
+                  EdgeInsets.only(left: 8, right: 8, bottom: bottomPadding),
               child: Material(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),

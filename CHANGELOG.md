@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Add bottom safe area
+
 ## 0.0.3
 
 * Tiny enhancements
