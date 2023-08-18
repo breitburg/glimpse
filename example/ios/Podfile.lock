@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - home_indicator (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - home_indicator (from `.symlinks/plugins/home_indicator/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  home_indicator:
+    :path: ".symlinks/plugins/home_indicator/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  home_indicator: 60c6a4b60d17173cd164c112eb9be37055b23af8
+
+PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
+
+COCOAPODS: 1.12.1
