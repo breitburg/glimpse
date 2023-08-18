@@ -1,6 +1,6 @@
 name: moda
 description: Modal sheets for Flutter
-version: 0.0.4
+version: 0.0.4+hotfix1
 repository: https://github.com/breitburg/moda
 
 environment:

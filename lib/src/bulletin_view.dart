@@ -46,7 +46,7 @@ class _DraggableBulletinViewState extends State<DraggableBulletinView>
             ),
             child: Padding(
               padding:
-                  EdgeInsets.only(left: 8, right: 8, bottom: bottomPadding),
+                  EdgeInsets.only(left: 8, right: 8, bottom: bottomPadding + 8),
               child: Material(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
