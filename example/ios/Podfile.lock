@@ -1,15 +1,21 @@
 PODS:
   - Flutter (1.0.0)
+  - screen_corners (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - screen_corners (from `.symlinks/plugins/screen_corners/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  screen_corners:
+    :path: ".symlinks/plugins/screen_corners/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  screen_corners: 94313a7239e0167121edfe53519add7a40f034f6
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 

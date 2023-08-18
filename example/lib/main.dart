@@ -39,11 +39,11 @@ class HomePage extends StatelessWidget {
       child: Center(
         child: CupertinoButton.filled(
           child: Text('Show bulletin'),
-          onPressed: () {
-            Navigator.of(context).push(
-              BulletinModalRoute(
-                builder: (context) => AirPodsProChargingDummy(),
-              ),
+          onPressed: () async {
+            await showBulletin(
+              context: context,
+              builder: (context) => AirPodsProChargingDummy(),
+              dismissible: false,
             );
           },
         ),
