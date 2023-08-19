@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Add showBulletin
+
 ## 0.0.5
 
 * Add smooth corners
