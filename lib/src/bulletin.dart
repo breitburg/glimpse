@@ -62,7 +62,7 @@ class BulletinModalRoute extends PageRouteBuilder {
     this.height = 450,
     this.backgroundColor,
     super.barrierDismissible = true,
-    super.barrierColor = const Color.fromARGB(107, 68, 68, 68),
+    super.barrierColor = const Color.fromARGB(135, 68, 68, 68),
   }) : super(
           pageBuilder: (_, __, ___) => const SizedBox.shrink(),
           opaque: false,
