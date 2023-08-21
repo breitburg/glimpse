@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Fix offset calculation algorithm
+
 ## 0.0.6
 
 * Add showBulletin

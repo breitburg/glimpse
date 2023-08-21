@@ -29,8 +29,7 @@ Future<void> showBulletin({
     BulletinModalRoute(
       builder: builder,
       draggable: draggable,
-      dragDismissible: dismissible,
-      barrierDismissible: dismissible,
+      dismissible: dismissible,
       height: height,
       backgroundColor: backgroundColor,
     ),
@@ -46,27 +45,27 @@ Future<void> showBulletin({
 ///
 /// [height] is the height of the bulletin view. It defaults to 450.
 /// [draggable] determines whether the bulletin view can be dragged up and down.
-/// [dragDismissible] determines whether the bulletin view can be dismissed by dragging it down.
+/// [dismissible] determines whether the bulletin view can be dismissed by dragging it down or by tapping the barrier.
 /// [backgroundColor] is the background color of the bulletin view. It defaults to the scaffold background color.
 /// [builder] is the builder for the bulletin view. It is required.
 class BulletinModalRoute extends PageRouteBuilder {
   final double height;
-  final bool draggable, dragDismissible;
+  final bool draggable, dismissible;
   final WidgetBuilder builder;
   final Color? backgroundColor;
 
   BulletinModalRoute({
     required this.builder,
     this.draggable = true,
-    this.dragDismissible = true,
+    this.dismissible = true,
     this.height = 450,
     this.backgroundColor,
-    super.barrierDismissible = true,
     super.barrierColor = const Color.fromARGB(135, 68, 68, 68),
   }) : super(
           pageBuilder: (_, __, ___) => const SizedBox.shrink(),
           opaque: false,
           transitionDuration: const Duration(milliseconds: 500),
+          barrierDismissible: dismissible,
         );
 
   @override
@@ -87,18 +86,16 @@ class BulletinModalRoute extends PageRouteBuilder {
       height: height,
       builder: builder,
       draggable: draggable,
-      dragDismissible: dragDismissible,
+      dragDismissible: dismissible,
       backgroundColor: backgroundColor,
       onClose: Navigator.of(context).pop,
-
-      // I don't know why, but Apple decided to give this view a 9pt padding
-      padding: 9.0,
+      padding: 10.0,
     );
   }
 }
 
 /// A draggable bulletin view that is responsible for the drag animation
-/// 
+///
 /// This widget is used by [BulletinModalRoute] to show a bulletin view.
 /// It is responsible for the drag animation and the dismiss animation.
 class _DraggableBulletinView extends StatefulWidget {
@@ -162,7 +159,7 @@ class _DraggableBulletinViewState extends State<_DraggableBulletinView>
   }
 
   /// Wraps the child with a [GestureDetector] to detect drag events
-  /// 
+  ///
   /// This widget is used by [_DraggableBulletinView] to detect drag events.
   /// It is responsible for the drag animation.
   Widget _dragDetector({required Widget child}) {
@@ -188,7 +185,7 @@ class _DraggableBulletinViewState extends State<_DraggableBulletinView>
           return Transform.translate(
             offset: Offset(
               0,
-              (1 - _controller.value * (2 - threshold)) * widget.height,
+              (threshold - _controller.value) * widget.height,
             ),
             child: child,
           );
