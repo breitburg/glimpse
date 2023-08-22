@@ -43,7 +43,6 @@ class HomePage extends StatelessWidget {
             await showBulletin(
               context: context,
               builder: (context) => AirPodsProChargingDummy(),
-              dismissible: false,
             );
           },
         ),

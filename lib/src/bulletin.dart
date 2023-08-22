@@ -191,7 +191,7 @@ class _DraggableBulletinViewState extends State<_DraggableBulletinView>
           return Transform.translate(
             offset: Offset(
               0,
-              (threshold - _controller.value) * widget.height,
+              (threshold - _controller.value) * widget.height + (1 - _controller.value) * widget.padding,
             ),
             child: child,
           );
