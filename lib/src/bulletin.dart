@@ -11,6 +11,7 @@ import 'package:smooth_corner/smooth_corner.dart';
 /// It is recommended to use this function instead of [Navigator.of(context).push].
 ///
 /// [builder] is the builder for the bulletin view. It is required.
+/// [rootNavigator] determines whether the bulletin view should be pushed to the root navigator.
 /// [draggable] determines whether the bulletin view can be dragged up and down.
 /// [dismissible] determines whether the bulletin view can be dismissed by dragging it down or by tapping on the barrier.
 /// [height] is the height of the bulletin view. It defaults to 450.
@@ -18,6 +19,7 @@ import 'package:smooth_corner/smooth_corner.dart';
 Future<void> showBulletin({
   required BuildContext context,
   required WidgetBuilder builder,
+  bool rootNavigator = true,
   bool draggable = true,
   bool dismissible = true,
   double height = 450,
@@ -25,7 +27,10 @@ Future<void> showBulletin({
 }) async {
   await ScreenCorners.initScreenCorners();
 
-  await Navigator.of(context).push(
+  await Navigator.of(
+    context,
+    rootNavigator: rootNavigator,
+  ).push(
     BulletinModalRoute(
       builder: builder,
       draggable: draggable,
