@@ -71,6 +71,7 @@ class BulletinModalRoute extends PageRouteBuilder {
           opaque: false,
           transitionDuration: const Duration(milliseconds: 500),
           barrierDismissible: dismissible,
+          fullscreenDialog: true,
         );
 
   @override
