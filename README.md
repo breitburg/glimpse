@@ -1,9 +1,42 @@
-# moda
+<img src="https://github.com/breitburg/glimpse/assets/25728414/bdd3284f-4c54-4ae4-8c65-c2fbc880247f" width="250px" align="right" />
 
-`moda` is a comprehensive Dart library designed to simplify the implementation of modal sheets and bulletins in your Flutter applications. This library offers a collection of pre-built and customizable modal sheets and bulletins that you can easily integrate into your Flutter projects.
+# Glimpse
 
-## Bulletins
+A minimalistic modal sheet inspired by AirPods that can be used to present quick information, such as onboarding, permissions, notifications, statuses, or bulletins.
 
-The library offers customizable bulletins that allow you to display important information, alerts, or announcements in a visually appealing way. Bulletins can be displayed prominently at the top of the screen and can include icons, titles, descriptions, and action buttons.
+```dart
+import 'package:glimpse/glimpse.dart';
 
-<img src="https://github.com/breitburg/moda/assets/25728414/8038b559-3aaa-4872-825e-d3f036dd52f8" width="300px" />
+await showGlimpse(
+    context: context,
+    height: 450, // optional
+    dismissible: true, // optional
+    builder: (context) => Text('Bonjour'),
+);
+```
+
+## Route
+
+When using a route, you should also insert a `initializeGlimpse()` before your `runApp()` call to manually initialize Glimpse. It is required for calculating the correct corner radius of the modal sheet on iOS.
+
+```dart
+void main() async {
+    await initializeGlimpse();
+    // ...
+    runApp(YourApp());
+}
+```
+
+When you've done that, you can use the `GlimpseModalRoute` to present a modal sheet:
+
+```dart
+import 'package:glimpse/glimpse.dart';
+
+await Navigator.of(context).push(
+    GlimpseModalRoute(
+        builder: (BuildContext context) {
+            return Text('Bonjour!');
+        },
+    ),
+);
+```
