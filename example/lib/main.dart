@@ -14,21 +14,19 @@ class GlimpseExampleApp extends StatelessWidget {
     return MaterialApp(
       title: 'Glimpse Example',
       theme: ThemeData(
-        useMaterial3: true,
+        useMaterial3: false,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.grey,
           brightness: MediaQuery.of(context).platformBrightness,
         ),
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({
-    super.key,
-  });
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +36,7 @@ class HomePage extends StatelessWidget {
       ),
       child: Center(
         child: CupertinoButton.filled(
-          child: Text('Show Glimpse'),
+          child: const Text('Show Glimpse'),
           onPressed: () async {
             await showGlimpse(
               context: context,
@@ -46,7 +44,7 @@ class HomePage extends StatelessWidget {
                 onGenerateRoute: (settings) {
                   return CupertinoPageRoute(
                     builder: (context) {
-                      return AirPodsProChargingDummy();
+                      return const AirPodsProChargingDummy();
                     },
                   );
                 },
@@ -60,13 +58,12 @@ class HomePage extends StatelessWidget {
 }
 
 class AirPodsProChargingDummy extends StatelessWidget {
-  const AirPodsProChargingDummy({
-    super.key,
-  });
+  const AirPodsProChargingDummy({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CupertinoColors.systemBackground,
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
         child: Column(
@@ -74,19 +71,21 @@ class AirPodsProChargingDummy extends StatelessWidget {
           children: [
             Text(
               'AirPods Pro',
-              style: CupertinoTheme.of(context)
-                  .textTheme
-                  .navLargeTitleTextStyle
-                  .copyWith(letterSpacing: -1),
+              style:
+                  CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
               textAlign: TextAlign.center,
             ),
             Expanded(child: Image.asset('assets/airpods_pro_placeholder.jpeg')),
             CupertinoButton(
-                child: Text('Continue'),
-                onPressed: () {
-                  Navigator.of(context).push(
-                      CupertinoPageRoute(builder: (context) => AllDoneDummy()));
-                }),
+              child: const Text('Continue'),
+              onPressed: () {
+                Navigator.of(context).push(
+                  CupertinoPageRoute(
+                    builder: (context) => const AllDoneDummy(),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -106,10 +105,7 @@ class AllDoneDummy extends StatelessWidget {
         children: [
           Text(
             'That\'s it!',
-            style: CupertinoTheme.of(context)
-                .textTheme
-                .navLargeTitleTextStyle
-                .copyWith(letterSpacing: -1),
+            style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),

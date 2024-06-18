@@ -1,9 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:screen_corners/screen_corners.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
+/// Initializes Glimpse
+///
+/// It is recommended to call this function in [main] before calling [runApp].
+/// This function is required to initialize [ScreenCorners] for iOS.
 Future<void> initializeGlimpse() async {
   await ScreenCorners.initScreenCorners();
 }
@@ -18,31 +23,35 @@ Future<void> initializeGlimpse() async {
 /// [rootNavigator] determines whether the glimpse view should be pushed to the root navigator.
 /// [draggable] determines whether the glimpse view can be dragged up and down.
 /// [dismissible] determines whether the glimpse view can be dismissed by dragging it down or by tapping on the barrier.
-/// [height] is the height of the glimpse view. It defaults to 450.
+/// [constraints] is the constraints for the glimpse view. It defaults to a height of 450.
+/// [padding] is the padding around the glimpse view. It defaults to 10.
 /// [backgroundColor] is the background color of the glimpse view. It defaults to the scaffold background color.
+/// [borderRadius] is the border radius for the glimpse view. It defaults to a circular border radius with a minimum of 20.
 Future<void> showGlimpse({
   required BuildContext context,
   required WidgetBuilder builder,
   bool rootNavigator = true,
   bool draggable = true,
   bool dismissible = true,
-  double height = 450,
+  BoxConstraints constraints = const BoxConstraints.tightFor(height: 450),
+  double padding = 10,
   Color? backgroundColor,
+  BorderRadiusGeometry? borderRadius,
 }) async {
-  await initializeGlimpse();
-
-  await Navigator.of(
-    context,
-    rootNavigator: rootNavigator,
-  ).push(
-    GlimpseModalRoute(
+  initializeGlimpse().then((_) {
+    Navigator.of(
+      context,
+      rootNavigator: rootNavigator,
+    ).push(GlimpseModalRoute(
       builder: builder,
       draggable: draggable,
       dismissible: dismissible,
-      height: height,
+      constraints: constraints,
+      padding: padding,
       backgroundColor: backgroundColor,
-    ),
-  );
+      borderRadius: borderRadius,
+    ));
+  });
 }
 
 /// A modal route that shows a glimpse view (AirPods-like)
@@ -52,14 +61,19 @@ Future<void> showGlimpse({
 /// The route is built using [PageRouteBuilder] and uses a [SlideTransition]
 /// to animate the route in and out.
 ///
-/// [height] is the height of the glimpse view. It defaults to 450.
+/// [constraints] is the constraints for the glimpse view. It defaults to a height of 450.
+/// [padding] is the padding around the glimpse view. It defaults to 10.
 /// [draggable] determines whether the glimpse view can be dragged up and down.
 /// [dismissible] determines whether the glimpse view can be dismissed by dragging it down or by tapping the barrier.
 /// [backgroundColor] is the background color of the glimpse view. It defaults to the scaffold background color.
 /// [builder] is the builder for the glimpse view. It is required.
+/// [borderRadius] is the border radius for the glimpse view. It defaults to a circular border radius with a minimum of 20.
 class GlimpseModalRoute extends PageRouteBuilder {
-  final double height;
-  final bool draggable, dismissible;
+  final BoxConstraints constraints;
+  final double padding;
+  final BorderRadiusGeometry? borderRadius;
+  final bool draggable;
+  final bool dismissible;
   final WidgetBuilder builder;
   final Color? backgroundColor;
 
@@ -67,9 +81,11 @@ class GlimpseModalRoute extends PageRouteBuilder {
     required this.builder,
     this.draggable = true,
     this.dismissible = true,
-    this.height = 450,
+    this.constraints = const BoxConstraints.tightFor(height: 450),
+    this.padding = 10,
+    this.borderRadius,
     this.backgroundColor,
-    super.barrierColor = const Color.fromARGB(135, 68, 68, 68),
+    super.barrierColor = const Color(0x99000000),
   }) : super(
           pageBuilder: (_, __, ___) => const SizedBox.shrink(),
           opaque: false,
@@ -93,13 +109,17 @@ class GlimpseModalRoute extends PageRouteBuilder {
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
     return _DraggableGlimpseView(
-      height: height,
+      constraints: constraints,
       builder: builder,
       draggable: draggable,
       dragDismissible: dismissible,
       backgroundColor: backgroundColor,
       onClose: Navigator.of(context).pop,
-      padding: 10.0,
+      borderRadius: borderRadius ??
+          BorderRadius.circular(
+            max(20, ScreenCorners.corner.value - padding),
+          ),
+      padding: padding,
     );
   }
 }
@@ -112,7 +132,8 @@ class _DraggableGlimpseView extends StatefulWidget {
   final bool draggable, dragDismissible;
   final WidgetBuilder builder;
   final VoidCallback onClose;
-  final double height;
+  final BoxConstraints constraints;
+  final BorderRadiusGeometry borderRadius;
   final Color? backgroundColor;
   final double padding;
 
@@ -121,8 +142,9 @@ class _DraggableGlimpseView extends StatefulWidget {
     required this.onClose,
     required this.draggable,
     required this.dragDismissible,
-    required this.height,
+    required this.constraints,
     required this.backgroundColor,
+    required this.borderRadius,
     required this.padding,
   });
 
@@ -132,10 +154,39 @@ class _DraggableGlimpseView extends StatefulWidget {
 
 class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
     with SingleTickerProviderStateMixin {
+  /// The threshold for the drag animation
+  ///
+  /// This value is used to determine the threshold for the drag animation.
+  /// It is used to determine when the glimpse view should be dismissed.
   static const threshold = 0.95;
 
+  /// The controller for the drag animation
+  ///
+  /// This controller is used to animate the drag events.
+  /// It is used to animate the glimpse view when it is dragged up and down.
   late final AnimationController _controller =
       AnimationController(vsync: this, value: threshold);
+
+  /// Initializes the state
+  ///
+  /// This function is called when the state is initialized.
+  /// It is used to set the system UI mode to immersive.
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    super.initState();
+  }
+
+  /// Disposes the state
+  ///
+  /// This function is called when the state is disposed.
+  /// It is used to set the system UI mode to edgeToEdge and dispose the controller.
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,22 +195,18 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
       child: MediaQuery(
         data: const MediaQueryData(),
         child: _dragDetector(
-          child: ConstrainedBox(
-            constraints: BoxConstraints.expand(height: widget.height),
-            child: Padding(
-              padding: EdgeInsets.all(widget.padding),
-              child: Material(
-                clipBehavior: Clip.antiAlias,
-                shape: SmoothRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    max(30, ScreenCorners.corner.value - widget.padding),
-                  ),
-                  smoothness: 0.6,
-                ),
-                color: widget.backgroundColor ??
-                    Theme.of(context).scaffoldBackgroundColor,
-                child: Builder(builder: widget.builder),
+          child: Container(
+            constraints: widget.constraints,
+            padding: EdgeInsets.all(widget.padding),
+            child: Material(
+              clipBehavior: Clip.antiAlias,
+              shape: SmoothRectangleBorder(
+                borderRadius: widget.borderRadius,
+                smoothness: 0.6,
               ),
+              color: widget.backgroundColor ??
+                  Theme.of(context).scaffoldBackgroundColor,
+              child: Builder(builder: widget.builder),
             ),
           ),
         ),
@@ -175,7 +222,7 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
     return GestureDetector(
       onVerticalDragUpdate: (details) {
         if (!widget.draggable) return;
-        _controller.value -= details.delta.dy / widget.height;
+        _controller.value -= details.delta.dy / widget.constraints.maxHeight;
       },
       onVerticalDragEnd: (details) async {
         final target = widget.dragDismissible ? _controller.value.round() : 1;
@@ -194,7 +241,7 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
           return Transform.translate(
             offset: Offset(
               0,
-              (threshold - _controller.value) * widget.height +
+              (threshold - _controller.value) * widget.constraints.maxHeight +
                   (1 - _controller.value) * widget.padding,
             ),
             child: child,
