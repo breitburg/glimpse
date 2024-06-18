@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:screen_corners/screen_corners.dart';
 import 'package:smooth_corner/smooth_corner.dart';
@@ -24,7 +24,7 @@ Future<void> initializeGlimpse() async {
 /// [draggable] determines whether the glimpse view can be dragged up and down.
 /// [dismissible] determines whether the glimpse view can be dismissed by dragging it down or by tapping on the barrier.
 /// [constraints] is the constraints for the glimpse view. It defaults to a height of 450.
-/// [padding] is the padding around the glimpse view. It defaults to 10.
+/// [margin] is the margin around the glimpse view. It defaults to 10.
 /// [backgroundColor] is the background color of the glimpse view. It defaults to the scaffold background color.
 /// [borderRadius] is the border radius for the glimpse view. It defaults to a circular border radius with a minimum of 20.
 Future<void> showGlimpse({
@@ -34,7 +34,7 @@ Future<void> showGlimpse({
   bool draggable = true,
   bool dismissible = true,
   BoxConstraints constraints = const BoxConstraints.tightFor(height: 450),
-  double padding = 10,
+  double margin = 10,
   Color? backgroundColor,
   BorderRadiusGeometry? borderRadius,
 }) async {
@@ -47,7 +47,7 @@ Future<void> showGlimpse({
       draggable: draggable,
       dismissible: dismissible,
       constraints: constraints,
-      padding: padding,
+      margin: margin,
       backgroundColor: backgroundColor,
       borderRadius: borderRadius,
     ));
@@ -62,7 +62,7 @@ Future<void> showGlimpse({
 /// to animate the route in and out.
 ///
 /// [constraints] is the constraints for the glimpse view. It defaults to a height of 450.
-/// [padding] is the padding around the glimpse view. It defaults to 10.
+/// [margin] is the margin around the glimpse view. It defaults to 10.
 /// [draggable] determines whether the glimpse view can be dragged up and down.
 /// [dismissible] determines whether the glimpse view can be dismissed by dragging it down or by tapping the barrier.
 /// [backgroundColor] is the background color of the glimpse view. It defaults to the scaffold background color.
@@ -70,7 +70,7 @@ Future<void> showGlimpse({
 /// [borderRadius] is the border radius for the glimpse view. It defaults to a circular border radius with a minimum of 20.
 class GlimpseModalRoute extends PageRouteBuilder {
   final BoxConstraints constraints;
-  final double padding;
+  final double margin;
   final BorderRadiusGeometry? borderRadius;
   final bool draggable;
   final bool dismissible;
@@ -82,7 +82,7 @@ class GlimpseModalRoute extends PageRouteBuilder {
     this.draggable = true,
     this.dismissible = true,
     this.constraints = const BoxConstraints.tightFor(height: 450),
-    this.padding = 10,
+    this.margin = 10,
     this.borderRadius,
     this.backgroundColor,
     super.barrierColor = const Color(0x99000000),
@@ -117,9 +117,9 @@ class GlimpseModalRoute extends PageRouteBuilder {
       onClose: Navigator.of(context).pop,
       borderRadius: borderRadius ??
           BorderRadius.circular(
-            max(20, ScreenCorners.corner.value - padding),
+            max(20, ScreenCorners.corner.value - margin),
           ),
-      padding: padding,
+      margin: margin,
     );
   }
 }
@@ -135,7 +135,7 @@ class _DraggableGlimpseView extends StatefulWidget {
   final BoxConstraints constraints;
   final BorderRadiusGeometry borderRadius;
   final Color? backgroundColor;
-  final double padding;
+  final double margin;
 
   const _DraggableGlimpseView({
     required this.builder,
@@ -145,7 +145,7 @@ class _DraggableGlimpseView extends StatefulWidget {
     required this.constraints,
     required this.backgroundColor,
     required this.borderRadius,
-    required this.padding,
+    required this.margin,
   });
 
   @override
@@ -190,26 +190,34 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: MediaQuery(
-        data: const MediaQueryData(),
-        child: _dragDetector(
-          child: Container(
-            constraints: widget.constraints,
-            padding: EdgeInsets.all(widget.padding),
-            child: Material(
-              clipBehavior: Clip.antiAlias,
-              shape: SmoothRectangleBorder(
-                borderRadius: widget.borderRadius,
-                smoothness: 0.6,
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Align(
+            // Center the glimpse view on large screens
+            alignment: constraints.biggest.height > 900
+                ? Alignment.center
+                : Alignment.bottomCenter,
+            child: MediaQuery.removePadding(
+              context: context,
+              child: _dragDetector(
+                child: ConstrainedBox(
+                  constraints: widget.constraints,
+                  child: SmoothCard(
+                    margin: EdgeInsets.all(widget.margin),
+                    borderRadius: widget.borderRadius,
+                    smoothness: 0.6,
+                    color: widget.backgroundColor ??
+                        CupertinoTheme.of(context).scaffoldBackgroundColor,
+                    child: Builder(builder: widget.builder),
+                  ),
+                ),
               ),
-              color: widget.backgroundColor ??
-                  Theme.of(context).scaffoldBackgroundColor,
-              child: Builder(builder: widget.builder),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -242,7 +250,7 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
             offset: Offset(
               0,
               (threshold - _controller.value) * widget.constraints.maxHeight +
-                  (1 - _controller.value) * widget.padding,
+                  (1 - _controller.value) * widget.margin,
             ),
             child: child,
           );

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:glimpse/glimpse.dart';
 
 void main() {
@@ -11,16 +10,9 @@ class GlimpseExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const CupertinoApp(
       title: 'Glimpse Example',
-      theme: ThemeData(
-        useMaterial3: false,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.grey,
-          brightness: MediaQuery.of(context).platformBrightness,
-        ),
-      ),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
@@ -62,9 +54,8 @@ class AirPodsProChargingDummy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CupertinoColors.systemBackground,
-      body: Container(
+    return CupertinoPageScaffold(
+      child: Container(
         padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -98,8 +89,8 @@ class AllDoneDummy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return CupertinoPageScaffold(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -111,7 +102,7 @@ class AllDoneDummy extends StatelessWidget {
           const SizedBox(height: 20),
           CupertinoButton(
             onPressed: Navigator.of(context, rootNavigator: true).pop,
-            child: Text('Done'),
+            child: const Text('Done'),
           ),
         ],
       ),

@@ -9,9 +9,9 @@ import 'package:glimpse/glimpse.dart';
 
 await showGlimpse(
     context: context,
-    height: 450, // optional
+    constraints: BoxConstraints(maxHeight: 300), // optional
     dismissible: true, // optional
-    builder: (context) => Text('Bonjour'),
+    builder: (context) => Text('Hello, world!'),
 );
 ```
 
