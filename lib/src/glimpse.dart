@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -173,7 +174,11 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
   /// It is used to set the system UI mode to immersive.
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    if (Platform.isIOS) {
+      // Make the status bar and home indicator hidden on iOS
+      // to match the behavior of the AirPods popup
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    }
     super.initState();
   }
 
@@ -183,7 +188,11 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
   /// It is used to set the system UI mode to edgeToEdge and dispose the controller.
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    if (Platform.isIOS) {
+      // Make the status bar and home indicator visible on iOS
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    }
+
     _controller.dispose();
     super.dispose();
   }

@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Made `SystemUiMode` apply only to iOS
+
 ## 0.0.2
 
 * Added `boderRadius` and `margin` properties to Glimpses
