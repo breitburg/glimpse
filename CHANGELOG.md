@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Fixed bug where setting `draggable` to `false` would still make scrollable widgets unusable
+
 ## 0.0.5
 
 * Updated `GlimpseModalPage` to include more properties

@@ -291,9 +291,25 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
   /// This widget is used by [_DraggableGlimpseView] to detect drag events.
   /// It is responsible for the drag animation.
   Widget _dragDetector({required Widget child}) {
+    final effectiveChild = AnimatedBuilder(
+      animation: _controller,
+      builder: (BuildContext context, Widget? child) {
+        return Transform.translate(
+          offset: Offset(
+            0,
+            (threshold - _controller.value) * widget.constraints.maxHeight +
+                (1 - _controller.value) * widget.margin,
+          ),
+          child: child,
+        );
+      },
+      child: child,
+    );
+
+    if (!widget.draggable) return effectiveChild;
+
     return GestureDetector(
       onVerticalDragUpdate: (details) {
-        if (!widget.draggable) return;
         _controller.value -= details.delta.dy / widget.constraints.maxHeight;
       },
       onVerticalDragEnd: (details) async {
@@ -307,20 +323,7 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
 
         if (target == 0) widget.onClose();
       },
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (BuildContext context, Widget? child) {
-          return Transform.translate(
-            offset: Offset(
-              0,
-              (threshold - _controller.value) * widget.constraints.maxHeight +
-                  (1 - _controller.value) * widget.margin,
-            ),
-            child: child,
-          );
-        },
-        child: child,
-      ),
+      child: effectiveChild,
     );
   }
 }
