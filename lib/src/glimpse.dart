@@ -55,6 +55,60 @@ Future<void> showGlimpse({
   });
 }
 
+/// A glimpse page that shows a glimpse view (AirPods-like)
+///
+/// This page is used by [Navigator] to show a glimpse view.
+/// It is a wrapper around [GlimpseModalRoute].
+///
+/// [builder] is the builder for the glimpse view. It is required.
+/// [key] is the key for the glimpse page.
+/// [name] is the name for the glimpse page.
+/// [arguments] are the arguments for the glimpse page.
+/// [restorationId] is the restoration ID for the glimpse page.
+/// [draggable] determines whether the glimpse view can be dragged up and down.
+/// [dismissible] determines whether the glimpse view can be dismissed by dragging it down or by tapping the barrier.
+/// [constraints] is the constraints for the glimpse view. It defaults to a height of 450.
+/// [margin] is the margin around the glimpse view. It defaults to 10.
+/// [backgroundColor] is the background color of the glimpse view. It defaults to the scaffold background color.
+/// [borderRadius] is the border radius for the glimpse view. It defaults to a circular border radius with a minimum of 20.
+class GlimpseModalPage extends Page<void> {
+  final BoxConstraints constraints;
+  final double margin;
+  final BorderRadiusGeometry? borderRadius;
+  final bool draggable;
+  final bool dismissible;
+  final Color? backgroundColor;
+  final WidgetBuilder builder;
+
+  const GlimpseModalPage({
+    required this.builder,
+    super.key,
+    super.name,
+    super.arguments,
+    super.restorationId,
+    this.draggable = true,
+    this.dismissible = true,
+    this.constraints = const BoxConstraints.tightFor(height: 450),
+    this.margin = 10,
+    this.borderRadius,
+    this.backgroundColor,
+  });
+
+  @override
+  Route<void> createRoute(BuildContext context) {
+    return GlimpseModalRoute(
+      builder: builder,
+      settings: this,
+      draggable: draggable,
+      dismissible: dismissible,
+      constraints: constraints,
+      margin: margin,
+      backgroundColor: backgroundColor,
+      borderRadius: borderRadius,
+    );
+  }
+}
+
 /// A modal route that shows a glimpse view (AirPods-like)
 ///
 /// This route is used by [showGlimpse] to show a glimpse view.
@@ -87,6 +141,7 @@ class GlimpseModalRoute extends PageRouteBuilder {
     this.borderRadius,
     this.backgroundColor,
     super.barrierColor = const Color(0x99000000),
+    super.settings,
   }) : super(
           pageBuilder: (_, __, ___) => const SizedBox.shrink(),
           opaque: false,

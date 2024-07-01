@@ -1,3 +1,11 @@
+## 0.0.5
+
+* Updated `GlimpseModalPage` to include more properties
+
+## 0.0.4
+
+* Added `GlimpseModalPage` to allow usage with GoRouter
+
 ## 0.0.3
 
 * Made `SystemUiMode` apply only to iOS
