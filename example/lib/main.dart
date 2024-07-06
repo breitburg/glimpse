@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:glimpse/glimpse.dart';
 
 void main() {
@@ -90,21 +91,29 @@ class AllDoneDummy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            'That\'s it!',
-            style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          CupertinoButton(
-            onPressed: Navigator.of(context, rootNavigator: true).pop,
-            child: const Text('Done'),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              "That's it!",
+              style:
+                  CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            const CupertinoTextField(
+              placeholder: 'Leave a review',
+            ),
+            const SizedBox(height: 20),
+            CupertinoButton(
+              onPressed: Navigator.of(context, rootNavigator: true).pop,
+              child: const Text('Done'),
+            ),
+          ],
+        ),
       ),
     );
   }

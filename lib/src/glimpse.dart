@@ -254,35 +254,41 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Align(
-            // Center the glimpse view on large screens
-            alignment: constraints.biggest.height > 900
-                ? Alignment.center
-                : Alignment.bottomCenter,
-            child: MediaQuery.removePadding(
-              context: context,
-              child: _dragDetector(
-                child: ConstrainedBox(
-                  constraints: widget.constraints,
-                  child: SmoothCard(
-                    margin: EdgeInsets.all(widget.margin),
-                    borderRadius: widget.borderRadius,
-                    smoothness: 0.6,
-                    color: widget.backgroundColor ??
-                        CupertinoTheme.of(context).scaffoldBackgroundColor,
-                    child: Builder(builder: widget.builder),
-                  ),
+    final existingMediaQuery = MediaQuery.of(context);
+    final newViewInsets = existingMediaQuery.viewInsets.copyWith(bottom: 0.0);
+    final newPadding = EdgeInsets.only(
+      top: existingMediaQuery.padding.top,
+      bottom: existingMediaQuery.viewInsets.bottom,
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          margin: newPadding,
+          // Center the glimpse view on large screens
+          alignment: constraints.biggest.longestSide > 900
+              ? Alignment.center
+              : Alignment.bottomCenter,
+          child: MediaQuery(
+            data: existingMediaQuery
+                .removePadding(removeTop: true)
+                .copyWith(viewInsets: newViewInsets),
+            child: _dragDetector(
+              child: ConstrainedBox(
+                constraints: widget.constraints,
+                child: SmoothCard(
+                  margin: EdgeInsets.all(widget.margin),
+                  borderRadius: widget.borderRadius,
+                  smoothness: 0.6,
+                  color: widget.backgroundColor ??
+                      CupertinoTheme.of(context).scaffoldBackgroundColor,
+                  child: Builder(builder: widget.builder),
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
