@@ -1,6 +1,6 @@
 name: glimpse
 description: A general-purpose modal sheet inspired by AirPods.
-version: 0.0.7
+version: 0.0.8
 repository: https://github.com/breitburg/glimpse
 
 environment:

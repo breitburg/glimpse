@@ -140,7 +140,7 @@ class GlimpseModalRoute extends PageRouteBuilder {
     this.margin = 10,
     this.borderRadius,
     this.backgroundColor,
-    super.barrierColor = const Color(0x99000000),
+    super.barrierColor = const Color(0x807F7F7F),
     super.settings,
   }) : super(
           pageBuilder: (_, __, ___) => const SizedBox.shrink(),
@@ -277,6 +277,7 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
               child: ConstrainedBox(
                 constraints: widget.constraints,
                 child: SmoothCard(
+                  elevation: 0,
                   margin: EdgeInsets.all(widget.margin),
                   borderRadius: widget.borderRadius,
                   smoothness: 0.6,

@@ -1,3 +1,11 @@
+## 0.0.8
+
+* Fixed bug where Glimpse would cover the keyboard when it is shown
+
+## 0.0.7
+
+* Made the default barrier color grey instead of black
+
 ## 0.0.6
 
 * Fixed bug where setting `draggable` to `false` would still make scrollable widgets unusable
