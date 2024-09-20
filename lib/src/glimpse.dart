@@ -266,7 +266,7 @@ class _DraggableGlimpseViewState extends State<_DraggableGlimpseView>
         return Container(
           margin: newPadding,
           // Center the glimpse view on large screens
-          alignment: constraints.biggest.longestSide > 900
+          alignment: constraints.biggest.longestSide > 1200
               ? Alignment.center
               : Alignment.bottomCenter,
           child: MediaQuery(
